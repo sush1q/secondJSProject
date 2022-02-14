@@ -33,4 +33,53 @@ window.addEventListener('DOMContentLoaded', function(){
             }
         }
     });
+
+    let deadline = '2022-02-15';
+        
+
+    function getTimeRemaining(endtime){
+        let t = Date.parse(endtime) - Date.parse(new Date()),
+            seconds = Math.floor((t/1000) % 60),
+            minutes = Math.floor((t/1000/60) % 60),
+            hours = Math.floor(t/(1000*60*60));
+            
+            return {
+                'total' : t,
+                'seconds' : seconds,
+                'minutes' : minutes,
+                'hours' : hours,
+            };
+    }
+
+    function setClock(id, endtime){
+        let timer = document.getElementById(id),
+            hours = document.querySelector('.hours'),
+            minutes = document.querySelector('.minutes'),
+            seconds = document.querySelector('.seconds'),
+            timeInterval = setInterval(updateClock, 1000);
+
+        function updateClock(){
+            let t = getTimeRemaining(endtime);
+            function addZero(num){
+                if (num <= 9){
+                    return '0'+num;
+                }
+                else{
+                    return num;
+                }
+            }
+            seconds.textContent = addZero(t.seconds);
+            minutes.textContent = addZero(t.minutes);
+            hours.textContent = addZero(t.hours);
+
+            if(t.total <= 0){
+                seconds.textContent = '00';
+                minutes.textContent = '00';
+                hours.textContent = '00';
+                clearInterval(timeInterval);
+            }
+        }
+    }
+    
+    setClock('timer', deadline+' 00:00:00');
 });
