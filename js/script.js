@@ -34,7 +34,7 @@ window.addEventListener('DOMContentLoaded', function(){
         }
     });
 
-    let deadline = '2022-02-15';
+    let deadline = '2022-02-17';
         
 
     function getTimeRemaining(endtime){
@@ -80,6 +80,38 @@ window.addEventListener('DOMContentLoaded', function(){
             }
         }
     }
-    
     setClock('timer', deadline+' 00:00:00');
+
+    //Modal
+
+    let more = document.querySelector('.more'),
+        close = document.querySelector('.popup-close'),
+        descriptionMore = document.querySelectorAll('.description-btn'),
+        overlay = document.querySelector('.overlay');
+
+    more.addEventListener('click', function(){
+        overlay.style.display = 'block';
+        more.classList.add('more-splash');
+        // document.body.style.overflow = 'hidden';       //запрет прокрутки страницы с открытым поп-ап окном
+    });
+
+    
+    function showTabMore(){
+        for(let i = 0; i < descriptionMore.length; i++){
+            descriptionMore[i].addEventListener('click', function(){
+                overlay.style.display = 'block';
+                descriptionMore[i].classList.add('more-splash');
+               // document.body.style.overflow = 'hidden';       //запрет прокрутки страницы с открытым поп-ап окном
+            });
+        }
+    }
+    showTabMore();
+
+    close.addEventListener('click', function(){
+        overlay.style.display = 'none';
+        more.classList.remove('more-splash');
+        document.body.style.overflow = '';
+    });
+
+
 });
