@@ -1,4 +1,4 @@
-window.addEventListener('DOMContentLoaded', function(){
+// window.addEventListener('DOMContentLoaded', function(){
     'use strict';
 
     let tab = document.querySelectorAll('.info-header-tab'),
@@ -113,5 +113,89 @@ window.addEventListener('DOMContentLoaded', function(){
         document.body.style.overflow = '';
     });
 
+    // Form
 
-});
+    let message = {
+        loading: "Загрузка...",
+        success: "Спасибо, мы скоро с вами свяжемся!",
+        failure: "Что-то пошло не так..."
+    };
+
+    let form = document.querySelector('.main-form'),
+        input = document.getElementsByTagName('input'),
+        statusMessage = document.createElement('div'),
+        contactForm = document.querySelector('#form');
+
+    statusMessage.classList.add('status');
+
+    form.addEventListener('submit', function(event){
+        event.preventDefault();
+        form.appendChild(statusMessage);
+
+        let request = new XMLHttpRequest();
+        request.open('POST', 'server.php');
+        request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded'); //FormData Format
+        // request.setRequestHeader('Content-Type', 'application/json; charset=utf-8')   //JSON Format
+
+        let formData = new FormData(form);
+
+        // let obj = {};     //JSON Format
+        // formData.forEach(function(value, keyframes){
+        //     obj[key] = value;
+        // });                                //JSON Format
+        // let json = JSON.stringify(obj);    //JSON Format
+
+        request.send(formData);  //FormData Format
+        // request.send(json); //JSON Format
+
+
+        request.addEventListener('readystatechange', function(){
+            if(request.readyState < 4){
+                statusMessage.innerHTML = message.loading;
+            } else if(request.readyState == 4 && request.status == 200){
+                statusMessage.innerHTML = message.success;
+            } else{
+                statusMessage.innerHTML = message.failure;
+            }
+        });
+        for(let i = 0; i < input.length; i++){
+            input[i].value = '';
+        } 
+    });
+
+    contactForm.addEventListener('submit', function(event){
+        event.preventDefault();
+        contactForm.appendChild(statusMessage);
+
+        let request = new XMLHttpRequest();
+        request.open('POST', 'server.php');
+        // request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded'); //FormData Format
+        request.setRequestHeader('Content-Type', 'application/json; charset=utf-8')   //JSON Format
+
+        let formData = new FormData(contactForm);
+
+        let obj = {};     //JSON Format
+        formData.forEach(function(value, keyframes){
+            obj[key] = value;
+        });                                //JSON Format
+        let json = JSON.stringify(obj);    //JSON Format
+
+        // request.send(formData);  //FormData Format
+        request.send(json); //JSON Format
+
+
+        request.addEventListener('readystatechange', function(){
+            if(request.readyState < 4){
+                statusMessage.innerHTML = message.loading;
+            } else if(request.readyState == 4 && request.status == 200){
+                statusMessage.innerHTML = message.success;
+            } else{
+                statusMessage.innerHTML = message.failure;
+            }
+        });
+    
+        for(let i = 0; i < input.length; i++){
+            input[i].value = '';
+        } 
+    });
+// });
